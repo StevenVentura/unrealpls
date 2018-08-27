@@ -6,7 +6,7 @@ AGameplayGameMode::AGameplayGameMode() : Super()
 {
 	static ConstructorHelpers::FClassFinder<APawn> PlayerPawnClassFinder(TEXT("/Script/MyProject6/GameplayCharacter"));
 	DefaultPawnClass = PlayerPawnClassFinder.Class;
-	a
+
 	// use our custom HUD class
 	//HUDClass = AGameplayHUD::StaticClass();
 
