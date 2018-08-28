@@ -17,6 +17,13 @@ AGameplayCharacter::AGameplayCharacter()
 	FirstPersonCameraComponent->RelativeLocation = FVector(-39.56f, 1.75f, 64.f); // Position the camera
 	FirstPersonCameraComponent->bUsePawnControlRotation = true;
 
+	//jumping
+	//https://forums.unrealengine.com/development-discussion/c-gameplay-programming/88247-implementing-jump
+	/*GetCharacterMovement()->GravityScale = 2.5f;
+	GetCharacterMovement()->JumpZVelocity = 620;*/
+
+
+
 	// Create a mesh component that will be used when being viewed from a '1st person' view (when controlling this pawn)
 	Mesh1P = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("CharacterMesh1P"));
 	Mesh1P->SetOnlyOwnerSee(true);
@@ -40,6 +47,12 @@ void AGameplayCharacter::BeginPlay()
 void AGameplayCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	if (GetActorLocation().Z < -300.f)
+	{
+		SetActorLocation(FVector(-104.940933f, -30.198050f, 187.929626f));
+	}
+	
 }
 
 void AGameplayCharacter::MoveForward(float value)
@@ -75,6 +88,21 @@ void AGameplayCharacter::VTurnBoy(float value)
 	AddControllerPitchInput(-1*value);
 }
 
+
+void AGameplayCharacter::StopJumping()
+{
+	bPressedJump = false;
+	ResetJumpState();
+}
+
+//
+//#define SLOG(Format)
+//{
+//
+//
+//
+//}
+
 // Called to bind functionality to input
 void AGameplayCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
 {
@@ -86,12 +114,15 @@ void AGameplayCharacter::SetupPlayerInputComponent(class UInputComponent* Player
 	UE_LOG(LogTemp, Warning, TEXT("303"));
 	PlayerInputComponent->BindAxis("MoveForward", this, &AGameplayCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AGameplayCharacter::MoveRight);
-	
+	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
+	//PlayerInputComponent->BindAxis("Jump", this, &AGameplayCharacter::Jump);
+	//PlayerInputComponent->BindAction("Jump", IE_Released, this, &AGameplayCharacter::StopJumping);
+
 	PlayerInputComponent->BindAxis("TurnW", this, &AGameplayCharacter::WTurnBoy);
 	PlayerInputComponent->BindAxis("TurnV", this, &AGameplayCharacter::VTurnBoy);
 	// Bind jump events
-	/*PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
-	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
+	
+	/*PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
 	PlayerInputComponent->BindAxis("Turn", this, &APawn::AddControllerYawInput);
 	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);*/
 

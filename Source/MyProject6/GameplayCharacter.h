@@ -31,6 +31,8 @@ protected:
 	void MoveRight(float);
 	void WTurnBoy(float);
 	void VTurnBoy(float);
+	/*void Jump(float);*/
+	void StopJumping();
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
